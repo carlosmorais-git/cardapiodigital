@@ -490,7 +490,7 @@ function buildOrderMessage() {
     lines.push(`*Obs. gerais:* ${notes}`);
   }
   lines.push("");
-  lines.push("_Enviado automaticamente pelo cardápio digital._");
+  lines.push("_Enviado automaticamente pelo cardápio digital. Sr.Desenvolvedor_");
   return encodeURIComponent(lines.join("\n"));
 }
 function openWhatsApp() {
