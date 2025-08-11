@@ -53,7 +53,7 @@ button {
 header {
   position: sticky;
   top: 0;
-  z-index: 101;
+  z-index: 100;
   background: linear-gradient(
     180deg,
     rgba(11, 12, 16, 0.95),
@@ -89,7 +89,7 @@ header {
 .logo_imagem {
   border-radius: 10px;
   width: 100%;
-  background: black;
+  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.35);
 }
 .title {
   font-size: 20px;
@@ -107,7 +107,7 @@ header {
   flex-wrap: wrap;
   padding: 12px 12px 16px;
   position: sticky;
-  top: 70px;
+  top: 93px;
   backdrop-filter: blur(6px);
   justify-content: center;
   z-index: 100;
@@ -319,9 +319,12 @@ dialog::backdrop {
   align-items: center;
 }
 .modal-body {
-  padding: 14px 16px 0;
+  padding: 14px 16px;
   display: grid;
   gap: 12px;
+}
+.modal-body.escolher {
+  padding: 14px 16px 0;
 }
 .modal-actions {
   padding: 14px 16px;
