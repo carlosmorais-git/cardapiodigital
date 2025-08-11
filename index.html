@@ -69,22 +69,19 @@
           <label>Observação do item (opcional)</label>
           <input id="mNote" placeholder="Ex.: sem tomate" />
         </div>
-        <div class="field">
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-            "
-          >
-            <span style="color: var(--text-muted)">Total deste item</span>
-            <strong id="mTotal">R$ 0,00</strong>
+        <div class="modal-actions">
+          <div class="field">
+            <div
+              class="alinha-vertical"
+            >
+              <span style="color: var(--text-muted)">Total deste item</span>
+              <strong id="mTotal">R$ 0,00</strong>
+            </div>
+            <div class="alinha-vertical">
+              <button class="btn-outline" id="mCancel">Cancelar</button>
+              <button class="btn btn-add" id="mAdd">Adicionar ao carrinho</button>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-outline" id="mCancel">Cancelar</button>
-        <button class="btn btn-add" id="mAdd">Adicionar ao carrinho</button>
       </div>
     </dialog>
 

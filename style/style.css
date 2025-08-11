@@ -315,17 +315,25 @@ dialog::backdrop {
   align-items: center;
 }
 .modal-body {
-  padding: 14px 16px;
+  padding: 14px 16px 0;
   display: grid;
   gap: 12px;
 }
 .modal-actions {
   padding: 14px 16px;
   border-top: 1px solid var(--border);
+  background: #0e1016;
   display: flex;
   gap: 10px;
-  justify-content: flex-end;
+  justify-content: space-around;
+  position: sticky;
+  bottom: 0;
+  flex-direction: column;
 }
+.modal-actions .field {
+  gap: 15px;
+}
+
 .opt-row {
   display: flex;
   gap: 6px;
@@ -434,4 +442,9 @@ dialog::backdrop {
   font-size: 12px;
   text-align: center;
   margin-top: 10px;
+}
+.alinha-vertical {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

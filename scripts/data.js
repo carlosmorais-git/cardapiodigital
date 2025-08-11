@@ -1,5 +1,6 @@
 const WHATSAPP_NUMBER = "5532984985335";
-
+const NOME = "Clara Lanche";
+const URL = "claralanches";
 const ADDONS = [
   { id: "add-bacon", label: "Bacon", price: 4.0 },
   { id: "add-cheddar", label: "Cheddar", price: 3.5 },
