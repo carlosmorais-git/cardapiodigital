@@ -108,7 +108,7 @@ window.chooseItem = (id) => {
 
   // Variantes
   if (p.variants) {
-    mVariantsBox.hidden = false;
+    mVariantsBox.classList.remove("esconder");
     mVariants.innerHTML = p.variants
       .map(
         (v) =>
@@ -120,14 +120,14 @@ window.chooseItem = (id) => {
       )
       .join("");
   } else {
-    mVariantsBox.hidden = true;
+    mVariantsBox.classList.add("esconder");
     mVariants.innerHTML = "";
   }
 
   // Addons -> UI com quantidade
   const a = p.addons || [];
   if (a.length) {
-    mAddonsBox.hidden = false;
+    mAddonsBox.classList.remove("esconder");
     mAddons.innerHTML = a
       .map(
         (opt) => `
@@ -144,7 +144,7 @@ window.chooseItem = (id) => {
       )
       .join("");
   } else {
-    mAddonsBox.hidden = true;
+    mAddonsBox.classList.add("esconder");
     mAddons.innerHTML = "";
   }
 
@@ -342,6 +342,10 @@ function renderCart() {
   const subtotal = cart.reduce((s, it) => s + cartItemTotal(it), 0);
   subtotalEl.textContent = money(subtotal);
   totalEl.textContent = money(subtotal);
+
+  // ✅ habilita/desabilita o botão "Finalizar"
+  const finishBtn = el("finish");
+  if (finishBtn) finishBtn.disabled = cart.length === 0;
 }
 
 window.incQty = (i) => {
@@ -450,8 +454,10 @@ function updateFab() {
 }
 
 // ===========================
-// WhatsApp + campos de entrega
+// WhatsApp + confirmação + lock + reset
 // ===========================
+
+// (opcional) mantém seu buildOrderMessage como está
 function buildOrderMessage() {
   if (cart.length === 0) return "";
   const name = el("customerName").value?.trim();
@@ -491,8 +497,39 @@ function buildOrderMessage() {
   }
   lines.push("");
   lines.push("_Enviado automaticamente pelo cardápio digital._");
+
   return encodeURIComponent(lines.join("\n"));
 }
+
+// ---------- LOCK anti reabrir ----------
+function waSetLock(ms = 5000) {
+  sessionStorage.setItem("wa_lock_until", String(Date.now() + ms));
+}
+function waLocked() {
+  return Date.now() < Number(sessionStorage.getItem("wa_lock_until") || 0);
+}
+
+// ---------- limpar carrinho + UI ----------
+function clearCartAll() {
+  try {
+    if (typeof cartModal !== "undefined" && cartModal?.open) cartModal.close();
+  } catch {}
+  try {
+    if (typeof itemModal !== "undefined" && itemModal?.open) itemModal.close();
+  } catch {}
+
+  cart.splice(0, cart.length);
+  localStorage.removeItem("cart"); // ok remover se não usa, mas não atrapalha
+
+  renderCart();
+  updateFab();
+
+  // desabilita o botão finalizar até ter itens novamente
+  const finishBtn = el("finish");
+  if (finishBtn) finishBtn.disabled = true;
+}
+
+// ---------- abrir WhatsApp de forma estável ----------
 function openWhatsApp() {
   if (!WHATSAPP_NUMBER || /\D/.test(WHATSAPP_NUMBER)) {
     alert(
@@ -500,21 +537,38 @@ function openWhatsApp() {
     );
     return;
   }
+  if (waLocked()) return; // evita reabrir
+
   const msg = buildOrderMessage();
   if (!msg) {
     alert("Seu carrinho está vazio.");
     return;
   }
+
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-  window.open(url, "_blank");
+
+  // âncora invisível (melhor que window.open no mobile)
+  const a = document.createElement("a");
+  a.href = url;
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+  a.style.display = "none";
+  document.body.appendChild(a);
+
+  waSetLock(5000); // trava 5s
+  a.click();
+  a.remove();
+
+  // limpa carrinho logo depois
+  setTimeout(clearCartAll, 100);
 }
-//  Chama o modal pra confirma com usuario
+
+// ---------- confirma com o usuário ----------
 el("finish").addEventListener("click", async () => {
   if (cart.length === 0) {
     alert("Seu carrinho está vazio.");
     return;
   }
-  // Preview rápido do total para confirmar
   const subtotal = cart.reduce((s, it) => s + cartItemTotal(it), 0);
   const ok = await confirmAction(
     `Finalizar pedido no WhatsApp?\nTotal: ${money(subtotal)}`,
@@ -528,6 +582,7 @@ el("delivery").addEventListener("change", (e) => {
   el("addressField").hidden = e.target.value !== "Entrega";
 });
 
+// helpers
 function escapeHtml(str) {
   return str.replace(
     /[&<>"]/g,

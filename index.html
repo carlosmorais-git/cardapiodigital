@@ -40,7 +40,7 @@
     </main>
 
     <!-- FAB: botão flutuante do carrinho -->
-    <button class="fab" id="fabCart" hidden>
+    <button class="fab" id="fabCart" >
       🛒 Carrinho <span class="fab-badge" id="fabCount">0</span>
     </button>
 
@@ -52,11 +52,11 @@
       </div>
       <div class="modal-body escolher">
         <div id="mDesc" style="color: var(--text-muted); font-size: 14px"></div>
-        <div id="mVariantsBox" class="field" hidden>
-          <label>Variação / Proteína</label>
+        <div id="mVariantsBox" class="field" >
+          <label >Variação / Proteína</label>
           <div class="opt-row" id="mVariants"></div>
         </div>
-        <div id="mAddonsBox" class="field" hidden>
+        <div id="mAddonsBox" class="field" >
           <label>Acréscimos</label>
           <div id="mAddons" style="display: grid; gap: 8px"></div>
         </div>
@@ -104,7 +104,7 @@
         ></div>
         <div id="cartEmpty" class="footnote">Seu carrinho está vazio.</div>
 
-        <div class="totals" id="totals" hidden>
+        <div class="totals" id="totals" >
           <div class="line">
             <span>Subtotal</span><strong id="subtotal">R$ 0,00</strong>
           </div>
@@ -130,7 +130,7 @@
                 <option value="Entrega">Entrega</option>
               </select>
             </div>
-            <div class="field" id="addressField" hidden>
+            <div class="field" id="addressField" >
               <label for="address">Endereço p/ entrega</label>
               <input
                 id="address"
